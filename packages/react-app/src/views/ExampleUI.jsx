@@ -13,6 +13,8 @@ export default function ExampleUI() {
 
   const [refreshToken, setRefreshToken] = React.useState("");
   const [apiToken, setApiToken] = React.useState("");
+  const [LatestPublications, setLatestPublications] = React.useState(null);
+  const [topProfiles, setTopProfiles] = React.useState(null);
 
   const { data, error, isLoading, signMessage } = useSignMessage({
     onSuccess(data, variables) {
@@ -51,6 +53,28 @@ export default function ExampleUI() {
     });
   };
 
+  const getPublications = () => {
+    Lens.ExplorePublications("LATEST", ["POST", "COMMENT", "MIRROR"], 10)
+      .then(res => {
+        console.log(res);
+        setLatestPublications(res.data.explorePublications.items[0]);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  const getProfiles = () => {
+    Lens.ExploreProfiles("MOST_FOLLOWERS", 10)
+      .then(res => {
+        console.log(res);
+        setTopProfiles(res.data.exploreProfiles.items);
+      })
+      .catch(err => {
+        console.log("error", err);
+      });
+  };
+
   if (isConnected)
     return (
       <div style={{ margin: 32 }}>
@@ -60,6 +84,12 @@ export default function ExampleUI() {
         </div>
         <div style={{ margin: 32 }}>
           <Button onClick={getNewToken}>Refresh Token</Button>
+        </div>
+        <div style={{ margin: 32 }}>
+          <Button onClick={getPublications}>Explore Publication</Button>
+        </div>
+        <div>
+          <Button onClick={getProfiles}>Explore Profiles</Button>
         </div>
         <div style={{ margin: 32 }}>
           <span style={{ marginRight: 8 }}>🛰</span>
@@ -73,7 +103,7 @@ export default function ExampleUI() {
               fontWeight: "bolder",
             }}
           >
-            {apiToken}
+            {LatestPublications}
           </span>
         </div>
         <div style={{ margin: 32 }}>
@@ -88,7 +118,7 @@ export default function ExampleUI() {
               fontWeight: "bolder",
             }}
           >
-            {refreshToken}
+            {topProfiles}
           </span>
         </div>
       </div>

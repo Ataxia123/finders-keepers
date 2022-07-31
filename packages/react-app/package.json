@@ -45,7 +45,7 @@
     "ipfs-http-client": "^55.0.0",
     "isomorphic-fetch": "^3.0.0",
     "lens": "^0.0.2",
-    "lens-protocol": "^0.1.4",
+    "lens-protocol": "^0.1.5",
     "node-watch": "^0.7.1",
     "postcss": "^8.2.6",
     "qrcode.react": "^1.0.0",
