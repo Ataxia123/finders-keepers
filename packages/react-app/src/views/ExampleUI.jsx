@@ -13,8 +13,8 @@ export default function ExampleUI() {
 
   const [refreshToken, setRefreshToken] = React.useState("");
   const [apiToken, setApiToken] = React.useState("");
-  const [LatestPublications, setLatestPublications] = React.useState(null);
-  const [topProfiles, setTopProfiles] = React.useState(null);
+  const [LatestPublications, setLatestPublications] = React.useState([]);
+  const [topProfiles, setTopProfiles] = React.useState([]);
 
   const { data, error, isLoading, signMessage } = useSignMessage({
     onSuccess(data, variables) {
@@ -57,7 +57,8 @@ export default function ExampleUI() {
     Lens.ExplorePublications("LATEST", ["POST", "COMMENT", "MIRROR"], 10)
       .then(res => {
         console.log(res);
-        setLatestPublications(res.data.explorePublications.items[0]);
+        setLatestPublications([res.data.explorePublications.items[0].metadata.content]);
+        console.log(LatestPublications);
       })
       .catch(err => {
         console.log(err);
@@ -68,7 +69,8 @@ export default function ExampleUI() {
     Lens.ExploreProfiles("MOST_FOLLOWERS", 10)
       .then(res => {
         console.log(res);
-        setTopProfiles(res.data.exploreProfiles.items);
+        setTopProfiles([res.data.exploreProfiles.items]);
+        console.log(topProfiles);
       })
       .catch(err => {
         console.log("error", err);
@@ -88,6 +90,21 @@ export default function ExampleUI() {
         <div style={{ margin: 32 }}>
           <Button onClick={getPublications}>Explore Publication</Button>
         </div>
+        <div className="col">
+          <h1>Latest Posts</h1>
+          <p>Hot off the press y&apos;all!</p>
+          <span
+            className="highlight"
+            style={{
+              marginLeft: 4,
+              /* backgroundColor: "#f1f1f1", */ padding: 4,
+              borderRadius: 4,
+              fontWeight: "bolder",
+            }}
+          >
+            <div>{LatestPublications}</div>
+          </span>
+        </div>
         <div>
           <Button onClick={getProfiles}>Explore Profiles</Button>
         </div>
@@ -103,7 +120,7 @@ export default function ExampleUI() {
               fontWeight: "bolder",
             }}
           >
-            {LatestPublications}
+            {apiToken}
           </span>
         </div>
         <div style={{ margin: 32 }}>
@@ -118,7 +135,7 @@ export default function ExampleUI() {
               fontWeight: "bolder",
             }}
           >
-            {topProfiles}
+            {refreshToken}
           </span>
         </div>
       </div>
