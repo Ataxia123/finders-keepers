@@ -1,3 +1,4 @@
+import React from "react";
 import { Button } from "antd";
 import { useAccount, useConnect, useSignMessage, useEnsAvatar, useEnsName } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
@@ -9,6 +10,9 @@ export default function ExampleUI() {
   const { connect } = useConnect({
     connector: new InjectedConnector(),
   });
+
+  const [refreshToken, setRefreshToken] = React.useState("");
+  const [apiToken, setApiToken] = React.useState("");
 
   const { data, error, isLoading, signMessage } = useSignMessage({
     onSuccess(data, variables) {
@@ -28,8 +32,9 @@ export default function ExampleUI() {
   const VerifySignature = async sign => {
     // Sending the signature to the server to verify
     const response = await Lens.Authenticate(address, sign);
-    console.log(response);
-
+    setRefreshToken(response.data.authenticate.refreshToken);
+    setApiToken(response.data.authenticate.accessToken);
+    console.log("response", response);
     // {
     //  data: {
     //   authenticate: {
@@ -38,13 +43,53 @@ export default function ExampleUI() {
     //   }
     // }
   };
+  const getNewToken = () => {
+    Lens.RefreshToken(refreshToken).then(res => {
+      // New token (access and refresh token)
+      console.log(res);
+      setApiToken(res.data.refresh.accessToken);
+    });
+  };
 
   if (isConnected)
     return (
-      <div>
-        Connected to {ensName ?? address}
-        <div>
-          <Button onClick={authenticate}>Login</Button>
+      <div style={{ margin: 32 }}>
+        Connected to {ensName ?? address} on WAGMI!
+        <div style={{ margin: 32 }}>
+          <Button onClick={authenticate}>Get Lens API Token</Button>
+        </div>
+        <div style={{ margin: 32 }}>
+          <Button onClick={getNewToken}>Refresh Token</Button>
+        </div>
+        <div style={{ margin: 32 }}>
+          <span style={{ marginRight: 8 }}>🛰</span>
+          <b> Api Token Is:</b>
+          <span
+            className="highlight"
+            style={{
+              marginLeft: 4,
+              /* backgroundColor: "#f1f1f1", */ padding: 4,
+              borderRadius: 4,
+              fontWeight: "bolder",
+            }}
+          >
+            {apiToken}
+          </span>
+        </div>
+        <div style={{ margin: 32 }}>
+          <span style={{ marginRight: 8 }}>🛰</span>
+          <b> Refresh Token Is:</b>
+          <span
+            className="highlight"
+            style={{
+              marginLeft: 4,
+              /* backgroundColor: "#f1f1f1", */ padding: 4,
+              borderRadius: 4,
+              fontWeight: "bolder",
+            }}
+          >
+            {refreshToken}
+          </span>
         </div>
       </div>
     );
