@@ -44,6 +44,8 @@
     "graphql": "^15.3.0",
     "ipfs-http-client": "^55.0.0",
     "isomorphic-fetch": "^3.0.0",
+    "lens": "^0.0.2",
+    "lens-protocol": "^0.1.4",
     "node-watch": "^0.7.1",
     "postcss": "^8.2.6",
     "qrcode.react": "^1.0.0",
@@ -55,6 +57,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "searchico": "^1.2.1",
+    "wagmi": "^0.6.0",
     "walletlink": "^2.1.5",
     "web3modal": "^1.9.1"
   },
