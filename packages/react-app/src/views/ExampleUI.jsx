@@ -69,7 +69,7 @@ export default function ExampleUI() {
     Lens.ExploreProfiles("MOST_FOLLOWERS", 10)
       .then(res => {
         console.log(res);
-        setTopProfiles([res.data.exploreProfiles.items]);
+        setTopProfiles(res.data.exploreProfiles.items.map(item => item.name));
         console.log(topProfiles);
       })
       .catch(err => {
@@ -107,6 +107,21 @@ export default function ExampleUI() {
         </div>
         <div>
           <Button onClick={getProfiles}>Explore Profiles</Button>
+        </div>
+        <div className="col">
+          <h1>Top Profiles</h1>
+          <p>Top Lens Profiles</p>
+          <span
+            className="highlight"
+            style={{
+              marginLeft: 4,
+              /* backgroundColor: "#f1f1f1", */ padding: 4,
+              borderRadius: 4,
+              fontWeight: "bolder",
+            }}
+          >
+            <div>{topProfiles}</div>
+          </span>
         </div>
         <div style={{ margin: 32 }}>
           <span style={{ marginRight: 8 }}>🛰</span>
