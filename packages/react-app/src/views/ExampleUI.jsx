@@ -57,7 +57,7 @@ export default function ExampleUI() {
     Lens.ExplorePublications("LATEST", ["POST", "COMMENT", "MIRROR"], 10)
       .then(res => {
         console.log(res);
-        setLatestPublications([res.data.explorePublications.items[0].metadata.content]);
+        setLatestPublications(res.data.explorePublications.items.map(item => item.metadata.content));
         console.log(LatestPublications);
       })
       .catch(err => {

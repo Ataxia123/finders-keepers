@@ -15313,10 +15313,10 @@ lead@^1.0.0:
   dependencies:
     flush-write-stream "^1.0.2"
 
-lens-protocol@^0.1.4:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/lens-protocol/-/lens-protocol-0.1.4.tgz#2a2d765813a9bec264455c9f8becc88c97eb9811"
-  integrity sha512-eG/7kfvSvBBQ/TLu6FnsZRfkROdEfcW7356kQoUsuCHKwr+987MDEQkCJ3jFzxvppqFBL1R+/nxI7OWEcZX/HA==
+lens-protocol@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/lens-protocol/-/lens-protocol-0.1.5.tgz#f3103f41d31afc8f2c8103c49fbd8f701359bc73"
+  integrity sha512-b6FwWhCwwIdAx7Eqd/9cTGVGGdosze2VswGqtcvuZVl+U/dLcedG5O9gaQ8TbDLtxBaT5VSd1YUpx8LCSeQNKw==
   dependencies:
     "@urql/core" "^2.6.1"
     graphql "^16.5.0"
