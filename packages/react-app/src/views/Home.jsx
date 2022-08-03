@@ -2,6 +2,7 @@ import { useContractReader } from "eth-hooks";
 import { ethers } from "ethers";
 import React from "react";
 import { Link } from "react-router-dom";
+import { Button } from "antd";
 
 /**
  * web3 props can be passed from '../App.jsx' into your local view component for use
@@ -18,19 +19,36 @@ function Home({ yourLocalBalance, readContracts, zdk, address }) {
 
   const yourNFT = zdk.collection({ address: BAYC });
 
-  const baycStats = zdk.collectionStatsAggregate({ collectionAddress: BAYC });
-  console.log("zoraquery", yourNFT);
-  console.log("baycStats", baycStats);
+  const [PromiseResult, SetPromiseResult] = React.useState(null);
+
+  const getStats = () => {
+    zdk
+      .collectionStatsAggregate({ collectionAddress: BAYC })
+      .then(res => {
+        console.log(res);
+        SetPromiseResult(res);
+        console.log(PromiseResult);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
+  console.log("yourNFT", yourNFT);
+  const baycVolume = PromiseResult.aggregateStat.salesVolume.usdcPrice;
+
+
   return (
     <div>
       <div style={{ margin: 32 }}>
         <span style={{ marginRight: 8 }}>📝</span>
-        This Is Your App Home. You can start editing it in {""}
+        <div>ZORA API SHOWCASE</div>
+        Bayc Historic Volume Is:
         <span
           className="highlight"
           style={{ marginLeft: 4, /* backgroundColor: "#f9f9f9", */ padding: 4, borderRadius: 4, fontWeight: "bolder" }}
         >
-          packages/react-app/src/views/Home.jsx
+          {baycVolume} USDC<Button onClick={getStats}>Refresh </Button>
         </span>
       </div>
       <div style={{ margin: 32 }}>
