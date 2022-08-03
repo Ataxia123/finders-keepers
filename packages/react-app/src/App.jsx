@@ -42,8 +42,23 @@ import deployedContracts from "./contracts/hardhat_contracts.json";
 import { Transactor, Web3ModalSetup } from "./helpers";
 import { Home, ExampleUI, Hints, Subgraph } from "./views";
 import { useStaticJsonRPC } from "./hooks";
+import { ZDK, ZDKNetwork, ZDKChain } from "@zoralabs/zdk";
 
 const { ethers } = require("ethers");
+
+const networkInfo = {
+  network: ZDKNetwork.Ethereum,
+  chain: ZDKChain.Mainnet,
+};
+
+const API_ENDPOINT = "https://api.zora.co/graphql";
+const args = {
+  endPoint: API_ENDPOINT,
+  networks: [networkInfo],
+  apiKey: process.env.API_KEY,
+};
+
+const zdk = new ZDK(args); // All arguments are optional
 /*
     Welcome to 🏗 scaffold-eth !
 
@@ -204,6 +219,7 @@ function App(props) {
       mainnetContracts
     ) {
       console.log("_____________________________________ 🏗 scaffold-eth _____________________________________");
+      console.log("zdk", zdk);
       console.log("🌎 mainnetProvider", mainnetProvider);
       console.log("🏠 localChainId", localChainId);
       console.log("👩‍💼 selected address:", address);
@@ -333,7 +349,7 @@ function App(props) {
       <Switch>
         <Route exact path="/">
           {/* pass in any web3 props to this Home component. For example, yourLocalBalance */}
-          <Home yourLocalBalance={yourLocalBalance} readContracts={readContracts} />
+          <Home yourLocalBalance={yourLocalBalance} readContracts={readContracts} zdk={zdk} address={address} />
         </Route>
         <Route exact path="/debug">
           {/*

@@ -9,16 +9,23 @@ import { Link } from "react-router-dom";
  * @param {*} readContracts contracts from current chain already pre-loaded using ethers contract module. More here https://docs.ethers.io/v5/api/contract/contract/
  * @returns react component
  **/
-function Home({ yourLocalBalance, readContracts }) {
+function Home({ yourLocalBalance, readContracts, zdk, address }) {
   // you can also use hooks locally in your component of choice
   // in this case, let's keep track of 'purpose' variable from our contract
   const purpose = useContractReader(readContracts, "YourContract", "purpose");
 
+  const BAYC = "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d";
+
+  const yourNFT = zdk.collection({ address: BAYC });
+
+  const baycStats = zdk.collectionStatsAggregate({ collectionAddress: BAYC });
+  console.log("zoraquery", yourNFT);
+  console.log("baycStats", baycStats);
   return (
     <div>
       <div style={{ margin: 32 }}>
         <span style={{ marginRight: 8 }}>📝</span>
-        This Is Your App Home. You can start editing it in{" "}
+        This Is Your App Home. You can start editing it in {""}
         <span
           className="highlight"
           style={{ marginLeft: 4, /* backgroundColor: "#f9f9f9", */ padding: 4, borderRadius: 4, fontWeight: "bolder" }}
