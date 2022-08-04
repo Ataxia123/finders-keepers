@@ -4,6 +4,8 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "antd";
 
+import { iframe, NFTPreview, NFTFullPage } from "@zoralabs/nft-components";
+
 /**
  * web3 props can be passed from '../App.jsx' into your local view component for use
  * @param {*} yourLocalBalance balance on current network
@@ -43,8 +45,10 @@ function Home({ yourLocalBalance, readContracts, zdk, address }) {
   return (
     <div>
       <div>ZORA API SHOWCASE</div>
+      <NFTPreview contract={BAYC} id="4163" />
       <Button onClick={getStats}>Refresh </Button>
       <div style={{ margin: 32 }}>
+        <NFTFullPage contract={BAYC} id="4163" />
         <span style={{ marginRight: 8 }}>📝</span>
         VOLUME STATS:
         <span
