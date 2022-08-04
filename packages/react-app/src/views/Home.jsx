@@ -46,12 +46,13 @@ function Home({ yourLocalBalance, readContracts, zdk, address }) {
       <Button onClick={getStats}>Refresh </Button>
       <div style={{ margin: 32 }}>
         <span style={{ marginRight: 8 }}>📝</span>
-        BAYC is held by:
+        VOLUME STATS:
         <span
           className="highlight"
           style={{ marginLeft: 4, /* backgroundColor: "#f9f9f9", */ padding: 4, borderRadius: 4, fontWeight: "bolder" }}
         >
-          {udscVol} accounts that own {nftCount}Mokees
+          <div> USDC VOLUME {udscVol} </div>
+          <div> ETH VOLUME {chainTokenPrice}</div>
         </span>
       </div>
       <div style={{ margin: 32 }}>
@@ -61,7 +62,7 @@ function Home({ yourLocalBalance, readContracts, zdk, address }) {
           className="highlight"
           style={{ marginLeft: 4, /* backgroundColor: "#f9f9f9", */ padding: 4, borderRadius: 4, fontWeight: "bolder" }}
         >
-          {chainTokenPrice} accounts that own {ownerCount}Mokees
+          {nftCount} Mokees are owned by {ownerCount} accounts
         </span>
       </div>
     </div>
