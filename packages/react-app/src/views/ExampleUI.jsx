@@ -98,7 +98,7 @@ export default function ExampleUI() {
       <div style={{ margin: 32 }}>
         {reccomendedProfiles.map((profile, index) => (
           <Link key={index} to={`/profile/${profile.id}`}>
-            <a href={"/profile/${profile.id"}>
+            <a>
               <div
                 style={{
                   backgroundColor: "rgb(97, 255, 150)",
@@ -113,11 +113,19 @@ export default function ExampleUI() {
               >
                 <p>Classifieds</p>
                 {profile.picture ? (
-                  <img
-                    alt="..."
-                    style={{ width: "300px", height: "300px", borderRadius: "10px" }}
-                    src={profile.picture.original.url}
-                  />
+                  profile.picture.__typename === "NftImage" ? (
+                    <img
+                      alt="..."
+                      style={{ width: "300px", height: "300px", borderRadius: "10px" }}
+                      src={profile.picture.uri}
+                    />
+                  ) : (
+                    <img
+                      alt="..."
+                      style={{ width: "300px", height: "300px", borderRadius: "10px" }}
+                      src={profile.picture.original.url}
+                    />
+                  )
                 ) : (
                   <img
                     alt="..."
