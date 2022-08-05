@@ -3,6 +3,8 @@ import { Button } from "antd";
 import { useAccount, useConnect, useSignMessage, useEnsAvatar, useEnsName } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import { Lens } from "lens-protocol";
+import { getRecommendedProfiles } from "../hooks/api.js";
+import { lensClient, reccomendProfiles } from "../hooks/api.js";
 
 export default function ExampleUI() {
   const { address, isConnected } = useAccount();
@@ -15,6 +17,7 @@ export default function ExampleUI() {
   const [apiToken, setApiToken] = React.useState("");
   const [LatestPublications, setLatestPublications] = React.useState([]);
   const [topProfiles, setTopProfiles] = React.useState([]);
+  const [recommendedProfiles, setRecommendedProfiles] = React.useState([]);
 
   const { data, error, isLoading, signMessage } = useSignMessage({
     onSuccess(data, variables) {
@@ -76,7 +79,19 @@ export default function ExampleUI() {
         console.log("error", err);
       });
   };
+//Work w API to get recommended profiles
+  React.useEffect(() => {
+    fetchProfiles();
+  }, []);
 
+  async function fetchProfiles() {
+    try {
+      const response = await lensClient.query(reccomendProfiles).toPromise();
+      console.log("response", response);
+    } catch (error) {
+      console.log(error);
+    }
+  }
   if (isConnected)
     return (
       <div style={{ margin: 32 }}>

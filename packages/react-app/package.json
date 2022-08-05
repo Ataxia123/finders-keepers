@@ -43,7 +43,7 @@
     "ethers": "^5.4.1",
     "fortmatic": "^2.2.1",
     "graphiql": "^1.4.7",
-    "graphql": "^15.3.0",
+    "graphql": "^16.5.0",
     "ipfs-http-client": "^55.0.0",
     "isomorphic-fetch": "^3.0.0",
     "lens": "^0.0.2",
@@ -59,6 +59,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "searchico": "^1.2.1",
+    "urql": "^2.2.3",
     "wagmi": "^0.6.0",
     "walletlink": "^2.1.5",
     "web3modal": "^1.9.1"
