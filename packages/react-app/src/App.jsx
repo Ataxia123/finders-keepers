@@ -41,6 +41,7 @@ import externalContracts from "./contracts/external_contracts";
 import deployedContracts from "./contracts/hardhat_contracts.json";
 import { Transactor, Web3ModalSetup } from "./helpers";
 import { Home, ExampleUI, Hints, Subgraph } from "./views";
+import Profile from "./views/profile/[id]";
 import { useStaticJsonRPC } from "./hooks";
 import { ZDK, ZDKNetwork, ZDKChain } from "@zoralabs/zdk";
 
@@ -422,7 +423,9 @@ function App(props) {
             mainnetProvider={mainnetProvider}
           />
         </Route>
+        <Route path="/profile/:id" component={Profile}/>
       </Switch>
+
       <ThemeSwitch />
 
       {/* 🗺 Extra UI like gas price, eth price, faucet, and support: */}

@@ -1,10 +1,13 @@
 import React from "react";
-import { lensClient, reccomendProfiles } from "../../hooks/api.js";
-import { useQuery } from "urql";
+import { Context } from "urql";
 
 export default function Profile() {
-  const router = React.useRoutes();
-  const { id } = router.query;
-
-  return <div>{id}</div>;
+  const { id } = React.useContext(Context);
+  console.log("ID DONT MISS ME IM IN ALL CAPS", id);
+  return (
+    <div>
+      <h1>Profile</h1>
+      <p>ID: {id}</p>
+    </div>
+  );
 }
