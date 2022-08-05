@@ -99,13 +99,19 @@ export default function ExampleUI() {
         {reccomendedProfiles.map((profile, index) => (
           <Link key={index} to={`/profile/${profile.id}`}>
             <a href={"/profile/${profile.id"}>
-              <div>
-                <h4>{profile.handle}</h4>
-                <p>{profile.bio}</p>
+              <div style={{ display: 'inline-block', border: '1px solid black', padding: '50px', margin: '1.5%', overflow: 'hidden' }}>
+                <h4>
+                  {profile.handle}
+                  <p style={{ inlineSize: '150px', overflowWrap: 'break-word', }}>{profile.bio}</p>
+              
+                <button style={{ display: 'inline-block', margin: '10px'}}>Buy</button>
+                <button>Sell</button>
+                </h4>
               </div>
             </a>
           </Link>
         ))}
+        <br></br>
         Connected to {ensName ?? address} on WAGMI!
         <div style={{ margin: 32 }}>
           <Button onClick={authenticate}>Get Lens API Token</Button>
