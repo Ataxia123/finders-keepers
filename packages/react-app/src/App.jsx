@@ -423,7 +423,6 @@ function App(props) {
           />
         </Route>
       </Switch>
-
       <ThemeSwitch />
 
       {/* 🗺 Extra UI like gas price, eth price, faucet, and support: */}
