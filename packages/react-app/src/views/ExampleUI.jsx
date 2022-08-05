@@ -97,7 +97,7 @@ export default function ExampleUI() {
     return (
       <div style={{ margin: 32 }}>
         {reccomendedProfiles.map((profile, index) => (
-          <Link>
+          <Link key={index} to={`/profile/${profile.id}`}>
             <a href={"/profile/${profile.id"}>
               <div>
                 <h4>{profile.handle}</h4>
