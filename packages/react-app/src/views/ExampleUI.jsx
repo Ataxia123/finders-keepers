@@ -3,8 +3,8 @@ import { Button } from "antd";
 import { useAccount, useConnect, useSignMessage, useEnsAvatar, useEnsName } from "wagmi";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import { Lens } from "lens-protocol";
-import { getRecommendedProfiles } from "../hooks/api.js";
 import { lensClient, reccomendProfiles } from "../hooks/api.js";
+import { Link } from "react-router-dom";
 
 export default function ExampleUI() {
   const { address, isConnected } = useAccount();
@@ -17,7 +17,7 @@ export default function ExampleUI() {
   const [apiToken, setApiToken] = React.useState("");
   const [LatestPublications, setLatestPublications] = React.useState([]);
   const [topProfiles, setTopProfiles] = React.useState([]);
-  const [recommendedProfiles, setRecommendedProfiles] = React.useState([]);
+  const [reccomendedProfiles, setRecommendedProfiles] = React.useState([]);
 
   const { data, error, isLoading, signMessage } = useSignMessage({
     onSuccess(data, variables) {
@@ -79,7 +79,7 @@ export default function ExampleUI() {
         console.log("error", err);
       });
   };
-//Work w API to get recommended profiles
+  //Work w API to get recommended profiles
   React.useEffect(() => {
     fetchProfiles();
   }, []);
@@ -87,7 +87,8 @@ export default function ExampleUI() {
   async function fetchProfiles() {
     try {
       const response = await lensClient.query(reccomendProfiles).toPromise();
-      console.log("response", response);
+      console.log("Final response", { response });
+      setRecommendedProfiles(response.data.recommendedProfiles);
     } catch (error) {
       console.log(error);
     }
@@ -95,6 +96,16 @@ export default function ExampleUI() {
   if (isConnected)
     return (
       <div style={{ margin: 32 }}>
+        {reccomendedProfiles.map((profile, index) => (
+          <Link>
+            <a href={"/profile/${profile.id"}>
+              <div>
+                <h4>{profile.handle}</h4>
+                <p>{profile.bio}</p>
+              </div>
+            </a>
+          </Link>
+        ))}
         Connected to {ensName ?? address} on WAGMI!
         <div style={{ margin: 32 }}>
           <Button onClick={authenticate}>Get Lens API Token</Button>
