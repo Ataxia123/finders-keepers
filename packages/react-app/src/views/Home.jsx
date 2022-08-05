@@ -17,7 +17,7 @@ function Home({ yourLocalBalance, readContracts, zdk, address }) {
   // in this case, let's keep track of 'purpose' variable from our contract
   const purpose = useContractReader(readContracts, "YourContract", "purpose");
 
-  const BAYC = "0x31d45de84fde2fb36575085e05754a4932dd5170";
+  const BAYC = "0xabEFBc9fD2F806065b4f3C237d4b59D9A97Bcac7";
 
   const yourNFT = zdk.collection({ address: BAYC });
 
@@ -45,10 +45,10 @@ function Home({ yourLocalBalance, readContracts, zdk, address }) {
   return (
     <div>
       <div>ZORA API SHOWCASE</div>
-      <NFTPreview contract={BAYC} id="6845" />
+      <NFTPreview contract={BAYC} id="25607" />
       <Button onClick={getStats}>Refresh </Button>
       <div style={{ margin: 32 }}>
-        <NFTFullPage contract={BAYC} id="6845" />
+        <NFTFullPage contract={BAYC} id="25607" />
         <span style={{ marginRight: 8 }}>📝</span>
         VOLUME STATS:
         <span
