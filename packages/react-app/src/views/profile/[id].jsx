@@ -1,6 +1,6 @@
 import { gql, useQuery } from "@apollo/client";
 import React from "react";
-import { GET_PROFILES } from "../../hooks/api";
+import { FK_COMMENT } from "../../hooks/api";
 // // FK's Lens Community = 0x6b36-0x41
 // ...
 //   const inputStruct: PostDataStruct = {
@@ -14,14 +14,30 @@ import { GET_PROFILES } from "../../hooks/api";
 // ...
 function Profile(props) {
   // get ID from props
-  let postId = props.match.params.id;
+  let id = props.match.params.id;
   console.log(props.match.params.id);
   //Get single profile Query
-  const { loading, error, data } = useQuery(GET_PROFILES, {
+  const { loading, error, data } = useQuery(FK_COMMENT, {
     variables: {
-      id: postId,
+      request: { id },
     },
+    skip: !id,
+    fetchPolicy: "no-cache",
   });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   console.log("Data", data);
   if (loading) return "Loading...";
   if (error) return `Error! ${error.message}`;

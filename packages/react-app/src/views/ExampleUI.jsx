@@ -39,11 +39,16 @@ export default function ExampleUI() {
   return (
     <div style={{ margin: 32 }}>
       <img
-        src={data1.publication.profile.picture.original.url}
+        src={
+          data1.publication.metadata.media.picture
+            ? data1.publication.metadata.media.picture.url
+            : "https://i.imgur.com/7gTbXRd.jpg"
+        }
         alt="profile"
         style={{ width: "300px", height: "300px", borderRadius: "10px" }}
       />
       <h1>{data1.publication.metadata.name} Feed</h1>
+      <h2>{data1.publication.metadata.description}</h2>
       <div></div>
       {data3.publications.items.map((items, index) => (
         <Link key={index} to={`/profile/${items.id}`}>
