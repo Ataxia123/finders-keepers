@@ -2888,7 +2888,7 @@
     "estree-walker" "^1.0.1"
     "picomatch" "^2.2.2"
 
-"@scaffold-eth/hardhat@file:C:\\Users\\Matt\\hackathon\\scaffold-lab\\packages\\hardhat":
+"@scaffold-eth/hardhat@file:C:\\Users\\Matt\\hackathon-repull\\scaffold-lab\\packages\\hardhat":
   "resolved" "file:packages/hardhat"
   "version" "1.0.0"
   dependencies:
@@ -2911,7 +2911,7 @@
     "qrcode-terminal" "^0.12.0"
     "ramda" "^0.27.1"
 
-"@scaffold-eth/react-app@file:C:\\Users\\Matt\\hackathon\\scaffold-lab\\packages\\react-app":
+"@scaffold-eth/react-app@file:C:\\Users\\Matt\\hackathon-repull\\scaffold-lab\\packages\\react-app":
   "resolved" "file:packages/react-app"
   "version" "1.0.0"
   dependencies:
@@ -2959,11 +2959,11 @@
     "walletlink" "^2.1.5"
     "web3modal" "^1.9.1"
 
-"@scaffold-eth/services@file:C:\\Users\\Matt\\hackathon\\scaffold-lab\\packages\\services":
+"@scaffold-eth/services@file:C:\\Users\\Matt\\hackathon-repull\\scaffold-lab\\packages\\services":
   "resolved" "file:packages/services"
   "version" "1.0.0"
 
-"@scaffold-eth/subgraph@file:C:\\Users\\Matt\\hackathon\\scaffold-lab\\packages\\subgraph":
+"@scaffold-eth/subgraph@file:C:\\Users\\Matt\\hackathon-repull\\scaffold-lab\\packages\\subgraph":
   "resolved" "file:packages/subgraph"
   "version" "1.0.0"
   dependencies:
@@ -12360,7 +12360,7 @@
     "eth-gas-reporter" "^0.2.20"
     "sha1" "^1.1.1"
 
-"hardhat@^2.0.0", "hardhat@^2.0.2", "hardhat@^2.0.3", "hardhat@^2.0.4", "hardhat@^2.8.3":
+"hardhat@^2.0.0", "hardhat@^2.0.2", "hardhat@^2.0.3", "hardhat@^2.0.4", "hardhat@^2.10.1", "hardhat@^2.8.3":
   "integrity" "sha512-0FN9TyCtn7Lt25SB2ei2G7nA2rZjP+RN6MvFOm+zYwherxLZNo6RbD8nDz88eCbhRapevmXqOiL2nM8INKsjmA=="
   "resolved" "https://registry.npmjs.org/hardhat/-/hardhat-2.10.1.tgz"
   "version" "2.10.1"

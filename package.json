@@ -67,7 +67,8 @@
     ]
   },
   "dependencies": {
-    "@zoralabs/nft-components": "^1.1.2"
+    "@zoralabs/nft-components": "^1.1.2",
+    "hardhat": "^2.10.1"
   },
   "devDependencies": {
     "husky": "^7.0.2"
