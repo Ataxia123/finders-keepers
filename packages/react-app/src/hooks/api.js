@@ -354,7 +354,7 @@ export const GET_FK_POSTS = gql`
 
 export const GET_FK = gql`
   query Publication {
-    publication(request: { publicationId: "0x6b36-0x41" }) {
+    publication(request: { publicationId: "0x8c50-0x1a" }) {
       __typename
       ... on Post {
         ...PostFields
