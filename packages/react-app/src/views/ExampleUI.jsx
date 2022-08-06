@@ -30,16 +30,17 @@ export default function ExampleUI() {
   console.log("Data2", data2);
   console.log("Data3", data3);
   //Work w API to get recommended profiles
-
-  const { loading, error, data } = useQuery(RECOMEND_PROFILES);
-  //setRecommendedProfiles({ data });
-  if (loading) return "Loading...";
-  if (error) return `Error! ${error.message}`;
+  if (loading1 || loading2 || loading3) {
+    return <div>Loading...</div>;
+  }
+  if (error1 || error2 || error3) {
+    return <div>Error...</div>;
+  }
   return (
     <div style={{ margin: 32 }}>
-      {data.recommendedProfiles.map((profile, index) => (
-        <Link key={index} to={`/profile/${profile.id}`}>
-          <a href={`/profile/${profile.id}`}>
+      {data3.publications.items.map((items, index) => (
+        <Link key={index} to={`/profile/${items.id}`}>
+          <a href={`/profile/${items.id}`}>
             <div
               style={{
                 backgroundColor: "rgb(97, 255, 150)",
@@ -53,18 +54,18 @@ export default function ExampleUI() {
               }}
             >
               <p>Classifieds</p>
-              {profile.picture ? (
-                profile.picture.__typename === "NftImage" ? (
+              {items.picture ? (
+                items.profile.picture.__typename === "NftImage" ? (
                   <img
                     alt="..."
                     style={{ width: "300px", height: "300px", borderRadius: "10px" }}
-                    src={profile.picture.uri}
+                    src={items.profile.picture.uri}
                   />
                 ) : (
                   <img
                     alt="..."
                     style={{ width: "300px", height: "300px", borderRadius: "10px" }}
-                    src={profile.picture.original.url}
+                    src={items.profile.picture.original.url}
                   />
                 )
               ) : (
@@ -75,7 +76,7 @@ export default function ExampleUI() {
                 />
               )}
               <h4>
-                {profile.handle}
+                {items.metadata.content}
                 {/* <p style={{ inlineSize: '150px', overflowWrap: 'break-word', }}>{profile.bio}</p>
                  */}
                 <br></br>
