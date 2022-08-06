@@ -54,7 +54,7 @@ export default function ExampleUI() {
               }}
             >
               <p>Classifieds</p>
-              {items.picture ? (
+              {items.profile.picture ? (
                 items.profile.picture.__typename === "NftImage" ? (
                   <img
                     alt="..."
