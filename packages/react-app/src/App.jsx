@@ -1,4 +1,4 @@
-import { Button, Col, Menu, Row } from "antd";
+import { Button, Col, Menu, Row, List } from "antd";
 import "antd/dist/antd.css";
 import {
   useBalance,
@@ -8,23 +8,13 @@ import {
   useOnBlock,
   useUserProviderAndSigner,
 } from "eth-hooks";
-//WAGMI IMPORTS
-import { WagmiConfig, createClient, defaultChains, configureChains } from "wagmi";
-
-import { alchemyProvider } from "wagmi/providers/alchemy";
-import { publicProvider } from "wagmi/providers/public";
-
-import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
-import { InjectedConnector } from "wagmi/connectors/injected";
-import { MetaMaskConnector } from "wagmi/connectors/metaMask";
-import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
-//
 import { useExchangeEthPrice } from "eth-hooks/dapps/dex";
 import React, { useCallback, useEffect, useState } from "react";
 import { Link, Route, Switch, useLocation } from "react-router-dom";
 import "./App.css";
 import {
   Account,
+  Balance,
   Contract,
   Faucet,
   GasGauge,
@@ -41,26 +31,28 @@ import externalContracts from "./contracts/external_contracts";
 import deployedContracts from "./contracts/hardhat_contracts.json";
 import { Transactor, Web3ModalSetup } from "./helpers";
 import { Home, ExampleUI, Hints, Subgraph } from "./views";
-import Profile from "./views/profile/[id]";
 import { useStaticJsonRPC } from "./hooks";
-import { ZDK, ZDKNetwork, ZDKChain } from "@zoralabs/zdk";
-import { lensClient } from "./hooks/api";
 
-const { ethers } = require("ethers");
+import { useEventListener } from "eth-hooks/events/useEventListener";
+
+import { ZDK, ZDKNetwork, ZDKChain } from "@zoralabs/zdk";
 
 const networkInfo = {
   network: ZDKNetwork.Ethereum,
   chain: ZDKChain.Mainnet,
-};
+}
 
 const API_ENDPOINT = "https://api.zora.co/graphql";
-const args = {
-  endPoint: API_ENDPOINT,
-  networks: [networkInfo],
-  apiKey: process.env.API_KEY,
-};
 
-const zdk = new ZDK(args); // All arguments are optional
+const args = {
+  endPoint:API_ENDPOINT,
+  networks:[networkInfo],
+  /*apiKey: process.env.API_KEY*/
+}
+
+const zdk = new ZDK(args);
+
+const { ethers } = require("ethers");
 /*
     Welcome to 🏗 scaffold-eth !
 
@@ -81,7 +73,7 @@ const zdk = new ZDK(args); // All arguments are optional
 */
 
 /// 📡 What chain are your contracts deployed to?
-const initialNetwork = NETWORKS.polygon; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
+const initialNetwork = NETWORKS.mainnet; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
 
 // 😬 Sorry for all the console logging
 const DEBUG = true;
@@ -101,7 +93,7 @@ const providers = [
 function App(props) {
   // specify all the chains your app is available on. Eg: ['localhost', 'mainnet', ...otherNetworks ]
   // reference './constants.js' for other networks
-  const networkOptions = [initialNetwork.name, "mainnet", "polygon"];
+  const networkOptions = [initialNetwork.name, "mainnet", "rinkeby"];
 
   const [injectedProvider, setInjectedProvider] = useState();
   const [address, setAddress] = useState();
@@ -197,13 +189,56 @@ function App(props) {
   // keep track of a variable from the contract in the local React state:
   const purpose = useContractReader(readContracts, "YourContract", "purpose");
 
+
+  const asks = useEventListener(readContracts, "ASKS", "AskCreated", localProvider, 15283641);
+
+  console.log("🐸  🔥  asks",asks)
+
+  const [ askContent, setAskContent ] = useState();
+  useEffect(async ()=>{
+    const newAskContent = []
+    for(let a in asks){
+      //if(asks[a].args.ask.findersFeeBps){
+        console.log("found one with a finders fee!",asks[a].args.ask.findersFeeBps)
+        console.log("getting...",a,asks[a])
+        console.log("ITEM",asks[a].args.tokenContract,asks[a].args.tokenId.toNumber())
+
+        const thisToken = {
+          address: asks[a].args.tokenContract,
+          tokenId: asks[a].args.tokenId.toString()
+        }
+
+        console.log("thisToken",thisToken)
+
+        const args = {
+          token: thisToken,
+          includeFullDetails: false // Optional, provides more data on the NFT such as all historical events
+        }
+
+        const response = await zdk.token(args)
+        console.log("📡 RESPONSE",response.token)
+
+        const fullObject = {...response.token,ask:asks[a].args.ask}
+
+        newAskContent.push(fullObject)
+
+      //}else{
+      //  console.log("...")
+      //}
+
+
+    }
+
+    console.log("💾 saving content:",newAskContent)
+    setAskContent(newAskContent)
+
+  },[ asks ])
+
+
   /*
   const addressFromENS = useResolveName(mainnetProvider, "austingriffith.eth");
   console.log("🏷 Resolved austingriffith.eth as:",addressFromENS)
   */
-  //WAGMI Client Setup
-  // Configure chains & providers with the Alchemy provider.
-  // Two popular providers are Alchemy (alchemy.com) and Infura (infura.io)
 
   //
   // 🧫 DEBUG 👨🏻‍🔬
@@ -221,7 +256,6 @@ function App(props) {
       mainnetContracts
     ) {
       console.log("_____________________________________ 🏗 scaffold-eth _____________________________________");
-      console.log("zdk", zdk);
       console.log("🌎 mainnetProvider", mainnetProvider);
       console.log("🏠 localChainId", localChainId);
       console.log("👩‍💼 selected address:", address);
@@ -273,15 +307,6 @@ function App(props) {
       loadWeb3Modal();
     }
   }, [loadWeb3Modal]);
-
-  const { chains, provider, webSocketProvider } = configureChains(defaultChains, [publicProvider()]);
-
-  // Set up client
-  const client = createClient({
-    autoConnect: true,
-    provider,
-    webSocketProvider,
-  });
 
   const faucetAvailable = localProvider && localProvider.connection && targetNetwork.name.indexOf("local") !== -1;
 
@@ -351,7 +376,7 @@ function App(props) {
       <Switch>
         <Route exact path="/">
           {/* pass in any web3 props to this Home component. For example, yourLocalBalance */}
-          <Home yourLocalBalance={yourLocalBalance} readContracts={readContracts} zdk={zdk} address={address} />
+          <Home yourLocalBalance={yourLocalBalance} readContracts={readContracts} />
         </Route>
         <Route exact path="/debug">
           {/*
@@ -359,6 +384,102 @@ function App(props) {
                 this <Contract/> component will automatically parse your ABI
                 and give you a form to interact with it locally
             */}
+
+            
+           <List
+              bordered
+              dataSource={askContent}
+              renderItem={item => {
+                console.log("IIIIITTTTEEEMMM",item)////
+
+                let extraRender = ""
+                if(item && item.token.image && item.token.image.url ){
+                  extraRender = (
+                    <img src={item.token.image.url} />
+                  )
+                }
+
+                const url = "https://embed.zora.co/"+item.token.collectionAddress+"/"+item.token.tokenId+"?title=false&controls=false&loop=false&autoplay=false";
+
+                return (
+                  <List.Item>
+                    <div>
+                    <div style={{float:"right"}}>
+                    <div><b>{item && item.token && item.token.name}</b></div>
+                    <Balance value={item.ask.askPrice} price={price} size={20} />
+                    {extraRender}
+                    <Button
+                      onClick={async () => {
+
+                        let result = tx(
+                          writeContracts['ASKS'].fillAsk(
+                            item.token.collectionAddress,
+                            item.token.tokenId,
+                            item.ask.askCurrency,
+                            item.ask.askPrice,
+                            readContracts["YourContract"].address,//finder fee will go here
+                            {value: item.ask.askPrice}
+                          )
+                        )
+                        console.log("result",result)
+                        console.log("wait", await result)
+
+                      }}
+                      size="large"
+                      shape="round"
+                    >
+                      <span style={{ marginRight: 8 }} role="img" aria-label="support">
+                        💵
+                      </span>
+                      FILL ASK
+                    </Button>
+                    </div>
+                    </div>
+                    <div style={{width:"320px",height:"320px",margin:"0 auto",position:"relative"}}>
+
+                        <iframe
+                          src={url} width="100%"
+                          height="100%"
+                          scrolling="no"
+                          allowtransparency="true"
+                          sandbox="allow-pointer-lock allow-same-origin allow-scripts allow-popups">
+                        </iframe>
+
+                    </div>
+                    <div>
+                    <Button
+                        onClick={() => {
+                          tx(writeContracts.YourContract.curate(item.token.collectionAddress,item.token.tokenId,true))
+                        }}
+                        size="large"
+                        shape="round"
+                      >
+                        <span style={{ marginRight: 8 }} role="img" aria-label="support">
+                        👍
+                        </span>
+                        bussin
+                      </Button>
+
+                      <Button
+                        onClick={() => {
+                          tx(writeContracts.YourContract.curate(item.token.collectionAddress,item.token.tokenId,false))
+                        }}
+                        size="large"
+                        shape="round"
+                      >
+                        <span style={{ marginRight: 8 }} role="img" aria-label="support">
+                        👎
+                        </span>
+                        mid
+                      </Button>
+
+                    </div>
+                  </List.Item>
+                );
+              }}
+            />
+
+
 
           <Contract
             name="YourContract"
@@ -368,6 +489,16 @@ function App(props) {
             address={address}
             blockExplorer={blockExplorer}
             contractConfig={contractConfig}
+          />
+           <Contract
+            name="ASKS"
+            customContract={mainnetContracts && mainnetContracts.contracts && mainnetContracts.contracts.DAI}
+            signer={userSigner}
+            provider={mainnetProvider}
+            address={address}
+            blockExplorer="https://etherscan.io/"
+            contractConfig={contractConfig}
+            chainId={1}
           />
         </Route>
         <Route path="/hints">
@@ -379,20 +510,18 @@ function App(props) {
           />
         </Route>
         <Route path="/exampleui">
-          <WagmiConfig client={client}>
-            <ExampleUI
-              address={address}
-              userSigner={userSigner}
-              mainnetProvider={mainnetProvider}
-              localProvider={localProvider}
-              yourLocalBalance={yourLocalBalance}
-              price={price}
-              tx={tx}
-              writeContracts={writeContracts}
-              readContracts={readContracts}
-              purpose={purpose}
-            />
-          </WagmiConfig>
+          <ExampleUI
+            address={address}
+            userSigner={userSigner}
+            mainnetProvider={mainnetProvider}
+            localProvider={localProvider}
+            yourLocalBalance={yourLocalBalance}
+            price={price}
+            tx={tx}
+            writeContracts={writeContracts}
+            readContracts={readContracts}
+            purpose={purpose}
+          />
         </Route>
         <Route path="/mainnetdai">
           <Contract
@@ -424,7 +553,6 @@ function App(props) {
             mainnetProvider={mainnetProvider}
           />
         </Route>
-        <Route path="/profile/:id" component={Profile}/>
       </Switch>
 
       <ThemeSwitch />
