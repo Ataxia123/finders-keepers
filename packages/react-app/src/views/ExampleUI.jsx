@@ -1,21 +1,34 @@
 import React from "react";
-import { RECOMEND_PROFILES, GET_FK } from "../hooks/api.js";
+import { RECOMEND_PROFILES, GET_FK, COMMENT_FEED_QUERY } from "../hooks/api.js";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
+import Grid from "antd/lib/card/Grid.js";
 
 export default function ExampleUI() {
   //Work w API to get recommended profiles
   const useMultiple = () => {
+    const id = "0x8c50-0x1a";
     const get_fk = useQuery(GET_FK);
+    const getFkPosts = useQuery(COMMENT_FEED_QUERY, {
+      variables: {
+        request: { commentsOf: id, limit: 10 },
+      },
+      skip: !id,
+      fetchPolicy: "no-cache",
+    });
     const recProfiles = useQuery(RECOMEND_PROFILES);
     //setRecommendedProfiles({ data });
-    return [get_fk, recProfiles];
+    return [get_fk, recProfiles, getFkPosts];
   };
 
-  const [{ loading: loading1, error: error1, data: data1 }, { loading: loading2, error: error2, data: data2 }] =
-    useMultiple();
+  const [
+    { loading: loading1, error: error1, data: data1 },
+    { loading: loading2, error: error2, data: data2 },
+    { loading: loading3, error: error3, data: data3 },
+  ] = useMultiple();
   console.log("Data1", data1);
   console.log("Data2", data2);
+  console.log("Data3", data3);
   //Work w API to get recommended profiles
 
   const { loading, error, data } = useQuery(RECOMEND_PROFILES);

@@ -118,7 +118,7 @@ function App(props) {
   if (DEBUG) console.log("📡 Connecting to Mainnet Ethereum");
 
   const logoutOfWeb3Modal = async () => {
-    await web3Modal.clearCachedProvider();
+    web3Modal.clearCachedProvider();
     if (injectedProvider && injectedProvider.provider && typeof injectedProvider.provider.disconnect == "function") {
       await injectedProvider.provider.disconnect();
     }
@@ -195,7 +195,7 @@ function App(props) {
   console.log("🐸  🔥  asks", asks);
 
   const [askContent, setAskContent] = useState();
-  useEffect(async () => {
+  useEffect(() => {
     const newAskContent = [];
     for (let a in asks) {
       //if(asks[a].args.ask.findersFeeBps){
@@ -215,7 +215,7 @@ function App(props) {
         includeFullDetails: false, // Optional, provides more data on the NFT such as all historical events
       };
 
-      const response = await zdk.token(args);
+      const response = zdk.token(args);
       console.log("📡 RESPONSE", response.token);
 
       const fullObject = { ...response.token, ask: asks[a].args.ask };
