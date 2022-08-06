@@ -1,9 +1,9 @@
 import React from "react";
-import { Context } from "urql";
+import { InMemoryCache } from "@apollo/client";
 
 export default function Profile() {
-  const { id } = React.useContext(Context);
-  console.log("ID DONT MISS ME IM IN ALL CAPS", id);
+  const router = new InMemoryCache({});
+  const { id } = router.query;
   return (
     <div>
       <h1>Profile</h1>
