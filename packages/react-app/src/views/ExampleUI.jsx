@@ -1,5 +1,4 @@
 import React from "react";
-import { InjectedConnector } from "wagmi/connectors/injected";
 import { RECOMEND_PROFILES } from "../hooks/api.js";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";

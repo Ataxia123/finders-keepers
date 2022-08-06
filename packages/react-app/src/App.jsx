@@ -44,6 +44,7 @@ import { Home, ExampleUI, Hints, Subgraph } from "./views";
 import Profile from "./views/profile/[id]";
 import { useStaticJsonRPC } from "./hooks";
 import { ZDK, ZDKNetwork, ZDKChain } from "@zoralabs/zdk";
+import { lensClient } from "./hooks/api";
 
 const { ethers } = require("ethers");
 
