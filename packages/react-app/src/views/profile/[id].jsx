@@ -1,7 +1,17 @@
 import { gql, useQuery } from "@apollo/client";
 import React from "react";
 import { GET_PROFILES } from "../../hooks/api";
-
+// // FK's Lens Community = 0x6b36-0x41
+// ...
+//   const inputStruct: PostDataStruct = {
+//     profileId: 1,
+//     contentURI: 'https://ipfs.io/ipfs/Qmby8QocUU2sPZL46rZeMctAuF5nrCc7eR1PPkooCztWPz',
+//     collectModule: freeCollectModuleAddr,
+//     collectModuleInitData: defaultAbiCoder.encode(['bool'], [true]),
+//     referenceModule: ZERO_ADDRESS,
+//     referenceModuleInitData: [],
+//   };
+// ...
 function Profile(props) {
   // get ID from props
   let postId = props.match.params.id;

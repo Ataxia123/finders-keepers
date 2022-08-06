@@ -1,14 +1,25 @@
 import React from "react";
-import { RECOMEND_PROFILES } from "../hooks/api.js";
+import { RECOMEND_PROFILES, GET_FK } from "../hooks/api.js";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 
 export default function ExampleUI() {
   //Work w API to get recommended profiles
+  const useMultiple = () => {
+    const get_fk = useQuery(GET_FK);
+    const recProfiles = useQuery(RECOMEND_PROFILES);
+    //setRecommendedProfiles({ data });
+    return [get_fk, recProfiles];
+  };
+
+  const [{ loading: loading1, error: error1, data: data1 }, { loading: loading2, error: error2, data: data2 }] =
+    useMultiple();
+  console.log("Data1", data1);
+  console.log("Data2", data2);
+  //Work w API to get recommended profiles
 
   const { loading, error, data } = useQuery(RECOMEND_PROFILES);
   //setRecommendedProfiles({ data });
-  console.log("Data", data);
   if (loading) return "Loading...";
   if (error) return `Error! ${error.message}`;
   return (
