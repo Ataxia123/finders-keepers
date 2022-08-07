@@ -2,6 +2,42 @@ import { gql } from "@apollo/client";
 import { CommunityFields } from "./CommunityFields";
 import { CommentFields } from "./CommentFields";
 
+export const CREATE_COMMENT_TYPED_DATA = gql`
+  mutation ($request: CreatePublicCommentRequest!) {
+    createCommentTypedData(request: $request) {
+      id
+      expiresAt
+      typedData {
+        types {
+          CommentWithSig {
+            name
+            type
+          }
+        }
+        domain {
+          name
+          chainId
+          version
+          verifyingContract
+        }
+        value {
+          nonce
+          deadline
+          profileId
+          profileIdPointed
+          pubIdPointed
+          referenceModuleData
+          contentURI
+          collectModule
+          collectModuleInitData
+          referenceModule
+          referenceModuleInitData
+        }
+      }
+    }
+  }
+`;
+
 export const FK_COMMENT = gql`
   query Publication($request: PublicationQueryRequest!) {
     publication(request: $request) {

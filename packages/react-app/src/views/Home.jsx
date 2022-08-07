@@ -14,7 +14,6 @@ import Balance from "../components/Balance";
 function Home({ yourLocalBalance, readContracts, askContent, Balance, writeContracts, tx, price }) {
   // you can also use hooks locally in your component of choice
   // in this case, let's keep track of 'purpose' variable from our contract
-  const purpose = useContractReader(readContracts, "YourContract", "purpose");
 
   return (
     <List
@@ -22,11 +21,6 @@ function Home({ yourLocalBalance, readContracts, askContent, Balance, writeContr
       dataSource={askContent}
       renderItem={item => {
         console.log("IIIIITTTTEEEMMM", item); ////
-
-        let extraRender = "";
-        if (item && item.token.image && item.token.image.url) {
-          extraRender = <img src={item.token.image.url} alt="..." />;
-        }
 
         const url =
           "https://embed.zora.co/" +
@@ -43,7 +37,6 @@ function Home({ yourLocalBalance, readContracts, askContent, Balance, writeContr
                   <b>{item && item.token && item.token.name}</b>
                 </div>
                 <Balance value={item.ask.askPrice} price={price} size={20} />
-                {extraRender}
                 <Button
                   onClick={async () => {
                     let result = tx(
