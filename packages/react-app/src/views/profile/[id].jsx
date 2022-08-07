@@ -1,62 +1,38 @@
 import { gql, useQuery } from "@apollo/client";
 import React from "react";
-import { FK_COMMENT } from "../../hooks/api";
-// // FK's Lens Community = 0x6b36-0x41
-// ...
-//   const inputStruct: PostDataStruct = {
-//     profileId: 1,
-//     contentURI: 'https://ipfs.io/ipfs/Qmby8QocUU2sPZL46rZeMctAuF5nrCc7eR1PPkooCztWPz',
-//     collectModule: freeCollectModuleAddr,
-//     collectModuleInitData: defaultAbiCoder.encode(['bool'], [true]),
-//     referenceModule: ZERO_ADDRESS,
-//     referenceModuleInitData: [],
-//   };
-// ...
-function Profile(props) {
-  // get ID from props
-  let id = props.match.params.id;
-  console.log(props.match.params.id);
-  //Get single profile Query
+import { FK_COMMENT, GET_FK } from "../../hooks/api";
+
+export default function Profile(props) {
+  const profileId = props.match.params.id;
   const { loading, error, data } = useQuery(FK_COMMENT, {
     variables: {
-      request: { id },
+      request: { publicationId: profileId }, //"0x8c50-0x1a"
     },
-    skip: !id,
+    skip: !profileId,
     fetchPolicy: "no-cache",
   });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  console.log("Data", data);
-  if (loading) return "Loading...";
-  if (error) return `Error! ${error.message}`;
+  console.log("get_fk", data);
+  console.log("id", profileId);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div>Error...</div>;
+  }
   return (
-    <div style={{ margin: 100 }}>
-      <h1>Stuff goes here</h1>
-      <div>{data.profiles.items[0].handle}</div>
-      {data.profiles.items[0].picture ? (
-        data.profiles.items[0].picture.__typename === "NftImage" ? (
+    <div>
+      {data.publication.profile.coverPicture ? (
+        data.publication.profile.coverPicture.__typename === "NftImage" ? (
           <img
             alt="..."
             style={{ width: "300px", height: "300px", borderRadius: "10px" }}
-            src={data.profiles.items[0].picture.uri}
+            src={data.publication.profile.coverPicture.uri}
           />
         ) : (
           <img
             alt="..."
             style={{ width: "300px", height: "300px", borderRadius: "10px" }}
-            src={data.profiles.items[0].picture.original.url}
+            src={data.publication.profile.coverPicture.original.url}
           />
         )
       ) : (
@@ -66,7 +42,8 @@ function Profile(props) {
           src="https://lh3.googleusercontent.com/SnPeYEbN776UygTg05HUfamo4CTSAxMt1cvfsDEDT3NkPmZ5RIEX70B80hUHIqO66LIpepSe8u0yDZEdKZYKHEc2FdL5cLsrVYttZ_Q=w600"
         />
       )}
+      <h1>Post {profileId}</h1>
+      <h2>Source: {data.publication.appId} </h2>
     </div>
   );
 }
-export default Profile;

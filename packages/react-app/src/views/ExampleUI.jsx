@@ -2,7 +2,6 @@ import React from "react";
 import { RECOMEND_PROFILES, GET_FK, COMMENT_FEED_QUERY } from "../hooks/api.js";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
-import Grid from "antd/lib/card/Grid.js";
 
 export default function ExampleUI() {
   //Work w API to get recommended profiles
