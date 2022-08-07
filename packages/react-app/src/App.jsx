@@ -90,7 +90,6 @@ const providers = [
   `https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_KEY}`,
   "https://rpc.scaffoldeth.io:48544",
 ];
-const LENS_HUB_CONTRACT_ADDRESS = "0x20f4D7DdeE23029048C53B42dc73A02De19F1c9E";
 function App(props) {
   // specify all the chains your app is available on. Eg: ['localhost', 'mainnet', ...otherNetworks ]
   // reference './constants.js' for other networks
@@ -171,7 +170,7 @@ function App(props) {
 
   // If you want to make 🔐 write transactions to your contracts, use the userSigner:
   const writeContracts = useContractLoader(userSigner, contractConfig, localChainId);
-  const writeLens = useContractLoader(userSigner, contractConfig, 137);
+
   // EXTERNAL CONTRACT EXAMPLE:
   //
   // If you want to bring in the mainnet DAI contract it would look like:
@@ -201,7 +200,7 @@ function App(props) {
       //if(asks[a].args.ask.findersFeeBps){
       console.log("found one with a finders fee!", asks[a].args.ask.findersFeeBps);
       console.log("getting...", a, asks[a]);
-      console.log("ITEM", asks[a].args.tokenContract, asks[a].args.tokenId.toNumber());
+      console.log("ITEM", asks[a].args.tokenContract, asks[a].args.tokenId.toString());
 
       const thisToken = {
         address: asks[a].args.tokenContract,
