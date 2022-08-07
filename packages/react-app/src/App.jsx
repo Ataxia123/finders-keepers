@@ -90,7 +90,7 @@ const providers = [
   `https://eth-mainnet.alchemyapi.io/v2/${ALCHEMY_KEY}`,
   "https://rpc.scaffoldeth.io:48544",
 ];
-
+const LENS_HUB_CONTRACT_ADDRESS = "0x20f4D7DdeE23029048C53B42dc73A02De19F1c9E";
 function App(props) {
   // specify all the chains your app is available on. Eg: ['localhost', 'mainnet', ...otherNetworks ]
   // reference './constants.js' for other networks
@@ -171,7 +171,7 @@ function App(props) {
 
   // If you want to make 🔐 write transactions to your contracts, use the userSigner:
   const writeContracts = useContractLoader(userSigner, contractConfig, localChainId);
-
+  const writeLens = useContractLoader(userSigner, contractConfig, 137);
   // EXTERNAL CONTRACT EXAMPLE:
   //
   // If you want to bring in the mainnet DAI contract it would look like:
@@ -298,12 +298,6 @@ function App(props) {
     // eslint-disable-next-line
   }, [setInjectedProvider]);
 
-  useEffect(() => {
-    if (web3Modal.cachedProvider) {
-      loadWeb3Modal();
-    }
-  }, [loadWeb3Modal]);
-
   const faucetAvailable = localProvider && localProvider.connection && targetNetwork.name.indexOf("local") !== -1;
 
   return (
@@ -349,7 +343,7 @@ function App(props) {
         USE_NETWORK_SELECTOR={USE_NETWORK_SELECTOR}
       />
       <Menu style={{ textAlign: "center", marginTop: 20 }} selectedKeys={[location.pathname]} mode="horizontal">
-      <Menu.Item key="/exampleui">
+        <Menu.Item key="/exampleui">
           <Link to="/exampleui">Finders Keepers</Link>
         </Menu.Item>
         <Menu.Item key="/">
@@ -494,7 +488,7 @@ function App(props) {
             price={price}
           />
         </Route>
-        <Route path="/profile/:id" component={Profile} />
+        <Route path="/profile/:id" component={Profile} userSigner={userSigner} />
         <Route path="/exampleui">
           <ExampleUI
             address={address}

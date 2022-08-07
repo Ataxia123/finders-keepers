@@ -1,8 +1,7 @@
-import { apolloClient } from "./apollo-client";
 // this is showing you how you use it with react for example
 // if your using node or something else you can import using
 // @apollo/client/core!
-import { gql } from "@apollo/client";
+import { gql, useMutation } from "@apollo/client";
 
 const CREATE_COMMENT_TYPED_DATA = `
   mutation($request: CreatePublicCommentRequest!) { 
@@ -40,9 +39,8 @@ const CREATE_COMMENT_TYPED_DATA = `
  }
 `;
 
-export const createCommentTypedData = createCommentTypedDataRequest => {
-  return apolloClient.mutate({
-    mutation: gql(CREATE_COMMENT_TYPED_DATA),
+export const CreateCommentTypedData = createCommentTypedDataRequest => {
+  return useMutation(gql(CREATE_COMMENT_TYPED_DATA), {
     variables: {
       request: createCommentTypedDataRequest,
     },

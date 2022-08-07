@@ -46,6 +46,7 @@
     "ipfs-http-client": "^55.0.0",
     "isomorphic-fetch": "^3.0.0",
     "node-watch": "^0.7.1",
+    "omit-deep": "^0.3.0",
     "postcss": "^8.2.6",
     "qrcode.react": "^1.0.0",
     "react": "^17.0.2",

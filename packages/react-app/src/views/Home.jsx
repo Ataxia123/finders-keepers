@@ -17,6 +17,7 @@ function Home({ yourLocalBalance, readContracts }) {
   return (
     <div>
       <h1>Home</h1>
+      <p>{purpose}</p>
     </div>
   );
 }
