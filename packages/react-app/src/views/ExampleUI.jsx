@@ -2,6 +2,7 @@ import React from "react";
 import { RECOMEND_PROFILES, GET_FK, COMMENT_FEED_QUERY } from "../hooks/api.js";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
+import Grid from "antd/lib/card/Grid.js";
 
 export default function ExampleUI() {
   //Work w API to get recommended profiles
@@ -48,56 +49,59 @@ export default function ExampleUI() {
       />
       <h1>{data1.publication.metadata.name} Feed</h1>
       <h2>{data1.publication.metadata.description}</h2>
-      <div></div>
-      {data3.publications.items.map((items, index) => (
-        <Link key={index} to={`/profile/${items.id}`}>
-          <a href={`/profile/${items.id}`}>
-            <div
-              style={{
-                backgroundColor: "rgb(97, 255, 150)",
-                display: "inline-block",
-                border: "1px solid black",
-                borderRadius: "10px",
-                padding: "42px",
-                margin: "1.5%",
-                overflow: "hidden",
-                textAlign: "top center",
-              }}
-            >
-              <p>Classifieds</p>
-              {items.profile.picture ? (
-                items.profile.picture.__typename === "NftImage" ? (
-                  <img
-                    alt="..."
-                    style={{ width: "300px", height: "300px", borderRadius: "10px" }}
-                    src={items.profile.picture.uri}
-                  />
-                ) : (
-                  <img
-                    alt="..."
-                    style={{ width: "300px", height: "300px", borderRadius: "10px" }}
-                    src={items.profile.picture.original.url}
-                  />
-                )
-              ) : (
-                <img
-                  alt="..."
-                  style={{ width: "300px", height: "300px", borderRadius: "10px" }}
-                  src="https://lh3.googleusercontent.com/SnPeYEbN776UygTg05HUfamo4CTSAxMt1cvfsDEDT3NkPmZ5RIEX70B80hUHIqO66LIpepSe8u0yDZEdKZYKHEc2FdL5cLsrVYttZ_Q=w600"
-                />
-              )}
-              <h4>
-                {items.metadata.content}
-                {/* <p style={{ inlineSize: '150px', overflowWrap: 'break-word', }}>{profile.bio}</p>
-                 */}
-                <br></br>
-                <button style={{ display: "inline-block", margin: "10px" }}>Buy</button>
-                <button>Sell</button>
-              </h4>
-            </div>
-          </a>
-        </Link>
-      ))}
+      <div>
+        {data3.publications.items.map((items, index) => (
+          <Grid>
+            <Link key={index} to={`/profile/${items.id}`}>
+              <a href={`/profile/${items.id}`}>
+                <div
+                  style={{
+                    backgroundColor: "rgb(97, 255, 150)",
+                    display: "inline-block",
+                    border: "1px solid black",
+                    borderRadius: "10px",
+                    padding: "42px",
+                    margin: "1.5%",
+                    overflow: "hidden",
+                    textAlign: "top center",
+                  }}
+                >
+                  <p>Classifieds</p>
+                  {items.profile.picture ? (
+                    items.profile.picture.__typename === "NftImage" ? (
+                      <img
+                        alt="..."
+                        style={{ width: "300px", height: "300px", borderRadius: "10px" }}
+                        src={items.profile.picture.uri}
+                      />
+                    ) : (
+                      <img
+                        alt="..."
+                        style={{ width: "300px", height: "300px", borderRadius: "10px" }}
+                        src={items.profile.picture.original.url}
+                      />
+                    )
+                  ) : (
+                    <img
+                      alt="..."
+                      style={{ width: "300px", height: "300px", borderRadius: "10px" }}
+                      src="https://lh3.googleusercontent.com/SnPeYEbN776UygTg05HUfamo4CTSAxMt1cvfsDEDT3NkPmZ5RIEX70B80hUHIqO66LIpepSe8u0yDZEdKZYKHEc2FdL5cLsrVYttZ_Q=w600"
+                    />
+                  )}
+                  <h4>
+                    {items.metadata.content}
+                    {/* <p style={{ inlineSize: '150px', overflowWrap: 'break-word', }}>{profile.bio}</p>
+                     */}
+                    <br></br>
+                    <button style={{ display: "inline-block", margin: "10px" }}>Buy</button>
+                    <button>Sell</button>
+                  </h4>
+                </div>
+              </a>
+            </Link>
+          </Grid>
+        ))}
+      </div>
     </div>
   );
 }
