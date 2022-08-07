@@ -17,7 +17,7 @@ const APIURL = "https://api.lens.dev";
 
 const subgraphUri = "http://localhost:8000/subgraphs/name/scaffold-eth/your-contract";
 
-const client = new ApolloClient({
+export const client = new ApolloClient({
   uri: APIURL,
   cache: new InMemoryCache(),
 });

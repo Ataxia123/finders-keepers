@@ -356,7 +356,15 @@ function App(props) {
       <Switch>
         <Route exact path="/">
           {/* pass in any web3 props to this Home component. For example, yourLocalBalance */}
-          <Home yourLocalBalance={yourLocalBalance} readContracts={readContracts} />
+          <Home
+            yourLocalBalance={yourLocalBalance}
+            readContracts={readContracts}
+            asks={asks}
+            askContent={askContent}
+            writeContracts={writeContracts}
+            tx={tx}
+            price={price}
+          />
         </Route>
         <Route exact path="/debug">
           {/*
@@ -364,101 +372,6 @@ function App(props) {
                 this <Contract/> component will automatically parse your ABI
                 and give you a form to interact with it locally
             */}
-
-          <List
-            bordered
-            dataSource={askContent}
-            renderItem={item => {
-              console.log("IIIIITTTTEEEMMM", item); ////
-
-              let extraRender = "";
-              if (item && item.token.image && item.token.image.url) {
-                extraRender = <img src={item.token.image.url} alt="..." />;
-              }
-
-              const url =
-                "https://embed.zora.co/" +
-                item.token.collectionAddress +
-                "/" +
-                item.token.tokenId +
-                "?title=false&controls=false&loop=false&autoplay=false";
-
-              return (
-                <List.Item>
-                  <div>
-                    <div style={{ float: "right" }}>
-                      <div>
-                        <b>{item && item.token && item.token.name}</b>
-                      </div>
-                      <Balance value={item.ask.askPrice} price={price} size={20} />
-                      {extraRender}
-                      <Button
-                        onClick={async () => {
-                          let result = tx(
-                            writeContracts["ASKS"].fillAsk(
-                              item.token.collectionAddress,
-                              item.token.tokenId,
-                              item.ask.askCurrency,
-                              item.ask.askPrice,
-                              readContracts["YourContract"].address, //finder fee will go here
-                              { value: item.ask.askPrice },
-                            ),
-                          );
-                          console.log("result", result);
-                          console.log("wait", await result);
-                        }}
-                        size="large"
-                        shape="round"
-                      >
-                        <span style={{ marginRight: 8 }} role="img" aria-label="support">
-                          💵
-                        </span>
-                        FILL ASK
-                      </Button>
-                    </div>
-                  </div>
-                  <div style={{ width: "320px", height: "320px", margin: "0 auto", position: "relative" }}>
-                    <iframe
-                      src={url}
-                      width="100%"
-                      height="100%"
-                      scrolling="no"
-                      allowtransparency="true"
-                      sandbox="allow-pointer-lock allow-same-origin allow-scripts allow-popups"
-                    ></iframe>
-                  </div>
-                  <div>
-                    <Button
-                      onClick={() => {
-                        tx(writeContracts.YourContract.curate(item.token.collectionAddress, item.token.tokenId, true));
-                      }}
-                      size="large"
-                      shape="round"
-                    >
-                      <span style={{ marginRight: 8 }} role="img" aria-label="support">
-                        👍
-                      </span>
-                      bussin
-                    </Button>
-
-                    <Button
-                      onClick={() => {
-                        tx(writeContracts.YourContract.curate(item.token.collectionAddress, item.token.tokenId, false));
-                      }}
-                      size="large"
-                      shape="round"
-                    >
-                      <span style={{ marginRight: 8 }} role="img" aria-label="support">
-                        👎
-                      </span>
-                      mid
-                    </Button>
-                  </div>
-                </List.Item>
-              );
-            }}
-          />
-
           <Contract
             name="YourContract"
             price={price}
