@@ -189,18 +189,19 @@ function App(props) {
   // keep track of a variable from the contract in the local React state:
   const purpose = useContractReader(readContracts, "YourContract", "purpose");
 
-  const asks = useEventListener(readContracts, "ASKS", "AskCreated", localProvider, 15283641);
+  const asks = useEventListener(readContracts, "ASKS", "AskCreated", mainnetProvider, 15290641);
 
   console.log("🐸  🔥  asks", asks);
 
   const [askContent, setAskContent] = useState();
-  useEffect(() => {
+  useEffect(async () => {
     const newAskContent = [];
     for (let a in asks) {
       //if(asks[a].args.ask.findersFeeBps){
       console.log("found one with a finders fee!", asks[a].args.ask.findersFeeBps);
       console.log("getting...", a, asks[a]);
       console.log("ITEM", asks[a].args.tokenContract, asks[a].args.tokenId.toString());
+      const item = await setAskContent(asks[a].args.tokenContract, asks[a].args.tokenId.toString());
 
       const thisToken = {
         address: asks[a].args.tokenContract,
@@ -214,7 +215,7 @@ function App(props) {
         includeFullDetails: false, // Optional, provides more data on the NFT such as all historical events
       };
 
-      const response = zdk.token(args);
+      const response = await zdk.token(args);
       console.log("📡 RESPONSE", response.token);
 
       const fullObject = { ...response.token, ask: asks[a].args.ask };
@@ -225,9 +226,7 @@ function App(props) {
       //  console.log("...")
       //}
     }
-
     console.log("💾 saving content:", newAskContent);
-    setAskContent(newAskContent);
   }, [asks]);
 
   /*
@@ -360,10 +359,12 @@ function App(props) {
             yourLocalBalance={yourLocalBalance}
             readContracts={readContracts}
             asks={asks}
+            setAskContent={setAskContent}
             askContent={askContent}
             writeContracts={writeContracts}
             tx={tx}
             price={price}
+            zdk = {zdk}
           />
         </Route>
         <Route exact path="/debug">

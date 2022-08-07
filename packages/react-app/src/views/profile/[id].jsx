@@ -1,11 +1,62 @@
-import { gql, useQuery, useMutation } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 import React from "react";
 import { FK_COMMENT, GET_FK } from "../../hooks/api";
-import { Button } from "antd";
+import { signedTypeData, getAddressFromSigner, splitSignature } from "./ethers-service";
+import { CreateCommentTypedData } from "./create-comment-typed-data.js";
 
-export default function Profile(props, userSigner, readContracts) {
+
+export const createComment = async (userSigner) => {
+  // hard coded to make the code example clear
+  const createCommentRequest = {
+    profileId: "0x03",
+    publicationId: "0x01-0x01",
+    contentURI: "ipfs://QmPogtffEF3oAbKERsoR4Ky8aTvLgBF5totp5AuF8YN6vl",
+    collectModule: {
+      timedFeeCollectModule: {
+        amount: {
+          currency: "0xD40282e050723Ae26Aeb0F77022dB14470f4e011",
+          value: "0.01",
+        },
+        recipient: "0xEEA0C1f5ab0159dba749Dc0BAee462E5e293daaF",
+        referralFee: 10.5,
+      },
+    },
+    referenceModule: {
+      followerOnlyReferenceModule: false,
+    },
+  };
+
+  const result = await CreateCommentTypedData(createCommentRequest);
+  const typedData = result.data.createCommentTypedData.typedData;
+
+  const signature = await signedTypeData(typedData.domain, typedData.types, typedData.value);
+  const { v, r, s } = splitSignature(signature);
+
+  // const tx = await lensHub.commentWithSig({
+  //   profileId: typedData.value.profileId,
+  //   contentURI: typedData.value.contentURI,
+  //   profileIdPointed: typedData.value.profileIdPointed,
+  //   pubIdPointed: typedData.value.pubIdPointed,
+  //   referenceModuleData: typedData.value.referenceModuleData,
+  //   collectModule: typedData.value.collectModule,
+  //   collectModuleInitData: typedData.value.collectModuleInitData,
+  //   referenceModule: typedData.value.referenceModule,
+  //   referenceModuleInitData: typedData.value.referenceModuleInitData,
+  //   sig: {
+  //     v,
+  //     r,
+  //     s,
+  //     deadline: typedData.value.deadline,
+  //   },
+  // });
+  // console.log(tx.hash);
+  // // 0x64464dc0de5aac614a82dfd946fc0e17105ff6ed177b7d677ddb88ec772c52d3
+  // // you can look at how to know when its been indexed here:
+  // //   - https://docs.lens.dev/docs/has-transaction-been-indexed
+};
+
+export default function Profile(props) {
   const profileId = props.match.params.id;
-
   const { loading, error, data } = useQuery(FK_COMMENT, {
     variables: {
       request: { publicationId: profileId }, //"0x8c50-0x1a"
@@ -15,11 +66,6 @@ export default function Profile(props, userSigner, readContracts) {
   });
   console.log("get_fk", data);
   console.log("id", profileId);
-
-  async function get_fk() {
-    const provider = readContracts.getProvider();
-  }
-
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -51,7 +97,6 @@ export default function Profile(props, userSigner, readContracts) {
       )}
       <h1>Post {profileId}</h1>
       <h2>Source: {data.publication.appId} </h2>
-      <Button onClick={profileId}>Create Comment</Button>
     </div>
   );
 }
