@@ -39,22 +39,19 @@ function Home({ zdk, address, yourLocalBalance, readContracts, askContent, Balan
         console.log(err);
       });
     console.log("yourNFT", yourNFT);
+    console.log("stats", getStats);
   };
   return (
     <div>
       <List
         bordered
-        dataSource={askContent}
-        renderItem={item =>
-          item.token ? (
-            <List.Item>
-              <NFTPreview contract={item.token.collectionAddress} id={item.token.tokenId} />
-              <List.Item.Meta title={item.collectionAddress} description={item.token.content} />
-            </List.Item>
-          ) : (
-            "No tokens yet"
-          )
-        }
+        dataSource={askContent[0]}
+        renderItem={item => (
+          <List.Item>
+            <NFTPreview contract={item.token.collectionAddress} id={item.token.tokenId} />
+            <List.Item.Meta title={item.collectionAddress} description={item.token.content} />
+          </List.Item>
+        )}
       />
     </div>
   );
