@@ -196,10 +196,9 @@ function App(props) {
   const [askContent, setAskContent] = useState([]);
 
   useEffect(
-    ( askContent ) => {
+    askContent => {
       async function getAskContent() {
         for (let a in asks) {
-          const newAskContent = [askContent];
           if (asks[a].args.ask.findersFeeBps) {
             console.log("found one with a finders fee!", asks[a].args.ask.findersFeeBps);
             console.log("getting...", a, asks[a]);
@@ -224,13 +223,12 @@ function App(props) {
 
           const fullObject = { ...response.token, ask: asks[a].args.ask };
 
-          newAskContent.push(fullObject);
+          askContent.push(fullObject);
 
           //}else{
           //  console.log("...")
           //}
-          console.log("💾 saving content:", newAskContent);
-          setAskContent(newAskContent);
+          console.log("💾 saving content:", fullObject);
         }
       }
       getAskContent();
