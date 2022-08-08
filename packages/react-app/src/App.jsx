@@ -189,48 +189,54 @@ function App(props) {
   // keep track of a variable from the contract in the local React state:
   const purpose = useContractReader(readContracts, "YourContract", "purpose");
 
-  const asks = useEventListener(readContracts, "ASKS", "AskCreated", mainnetProvider, 15290641);
+  const asks = useEventListener(readContracts, "ASKS", "AskCreated", mainnetProvider, 14996934);
 
   console.log("🐸  🔥  asks", asks);
 
-  const [askContent, setAskContent] = useState();
-  useEffect(() => {
-    async function getAskContent() {
-      for (let a in asks) {
-        const newAskContent = [];
-        //if(asks[a].args.ask.findersFeeBps){
-        console.log("found one with a finders fee!", asks[a].args.ask.findersFeeBps);
-        console.log("getting...", a, asks[a]);
-        console.log("ITEM", asks[a].args.tokenContract, asks[a].args.tokenId.toString());
-        const item = await setAskContent(asks[a].args.tokenContract, asks[a].args.tokenId.toString());
+  const [askContent, setAskContent] = useState([]);
 
-        const thisToken = {
-          address: asks[a].args.tokenContract,
-          tokenId: asks[a].args.tokenId.toString(),
-        };
+  useEffect(
+    ( askContent ) => {
+      async function getAskContent() {
+        for (let a in asks) {
+          const newAskContent = [askContent];
+          if (asks[a].args.ask.findersFeeBps) {
+            console.log("found one with a finders fee!", asks[a].args.ask.findersFeeBps);
+            console.log("getting...", a, asks[a]);
+            console.log("ITEM", asks[a].args.tokenContract, asks[a].args.tokenId.toString());
+            const item = await setAskContent(asks[a].args.tokenContract, asks[a].args.tokenId.toString());
+            console.log("item", item);
+          }
+          const thisToken = {
+            address: asks[a].args.tokenContract,
+            tokenId: asks[a].args.tokenId.toString(),
+          };
 
-        console.log("thisToken", thisToken);
+          console.log("thisToken", thisToken);
 
-        const args = {
-          token: thisToken,
-          includeFullDetails: false, // Optional, provides more data on the NFT such as all historical events
-        };
+          const args = {
+            token: thisToken,
+            includeFullDetails: false, // Optional, provides more data on the NFT such as all historical events
+          };
 
-        const response = await zdk.token(args);
-        console.log("📡 RESPONSE", response.token);
+          const response = await zdk.token(args);
+          console.log("📡 RESPONSE", response.token);
 
-        const fullObject = { ...response.token, ask: asks[a].args.ask };
+          const fullObject = { ...response.token, ask: asks[a].args.ask };
 
-        newAskContent.push(fullObject);
+          newAskContent.push(fullObject);
 
-        //}else{
-        //  console.log("...")
-        //}
-        console.log("💾 saving content:", newAskContent);
-        setAskContent(newAskContent);
+          //}else{
+          //  console.log("...")
+          //}
+          console.log("💾 saving content:", newAskContent);
+          setAskContent(newAskContent);
+        }
       }
-    }
-  }, [asks]);
+      getAskContent();
+    },
+    [asks],
+  );
 
   /*
   const addressFromENS = useResolveName(mainnetProvider, "austingriffith.eth");
