@@ -194,39 +194,42 @@ function App(props) {
   console.log("🐸  🔥  asks", asks);
 
   const [askContent, setAskContent] = useState();
-  useEffect(async () => {
-    const newAskContent = [];
-    for (let a in asks) {
-      //if(asks[a].args.ask.findersFeeBps){
-      console.log("found one with a finders fee!", asks[a].args.ask.findersFeeBps);
-      console.log("getting...", a, asks[a]);
-      console.log("ITEM", asks[a].args.tokenContract, asks[a].args.tokenId.toString());
-      const item = await setAskContent(asks[a].args.tokenContract, asks[a].args.tokenId.toString());
+  useEffect(() => {
+    async function getAskContent() {
+      for (let a in asks) {
+        const newAskContent = [];
+        //if(asks[a].args.ask.findersFeeBps){
+        console.log("found one with a finders fee!", asks[a].args.ask.findersFeeBps);
+        console.log("getting...", a, asks[a]);
+        console.log("ITEM", asks[a].args.tokenContract, asks[a].args.tokenId.toString());
+        const item = await setAskContent(asks[a].args.tokenContract, asks[a].args.tokenId.toString());
 
-      const thisToken = {
-        address: asks[a].args.tokenContract,
-        tokenId: asks[a].args.tokenId.toString(),
-      };
+        const thisToken = {
+          address: asks[a].args.tokenContract,
+          tokenId: asks[a].args.tokenId.toString(),
+        };
 
-      console.log("thisToken", thisToken);
+        console.log("thisToken", thisToken);
 
-      const args = {
-        token: thisToken,
-        includeFullDetails: false, // Optional, provides more data on the NFT such as all historical events
-      };
+        const args = {
+          token: thisToken,
+          includeFullDetails: false, // Optional, provides more data on the NFT such as all historical events
+        };
 
-      const response = await zdk.token(args);
-      console.log("📡 RESPONSE", response.token);
+        const response = await zdk.token(args);
+        console.log("📡 RESPONSE", response.token);
 
-      const fullObject = { ...response.token, ask: asks[a].args.ask };
+        const fullObject = { ...response.token, ask: asks[a].args.ask };
 
-      newAskContent.push(fullObject);
+        newAskContent.push(fullObject);
 
-      //}else{
-      //  console.log("...")
-      //}
+        //}else{
+        //  console.log("...")
+        //}
+        console.log("💾 saving content:", newAskContent);
+        setAskContent(newAskContent);
+      }
     }
-    console.log("💾 saving content:", newAskContent);
   }, [asks]);
 
   /*
@@ -364,7 +367,7 @@ function App(props) {
             writeContracts={writeContracts}
             tx={tx}
             price={price}
-            zdk = {zdk}
+            zdk={zdk}
           />
         </Route>
         <Route exact path="/debug">
