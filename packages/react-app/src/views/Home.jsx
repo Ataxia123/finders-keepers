@@ -45,11 +45,11 @@ function Home({ zdk, address, yourLocalBalance, readContracts, askContent, Balan
       {" "}
       <List
         bordered
-        dataSource={asks}
+        dataSource={askContent}
         renderItem={item => (
           <List.Item>
-            <NFTPreview contract={item.args[0]} id={item.args[1].toString()} />
-            <List.Item.Meta title={item.args[0]} description={item.args[1].toString()} />
+            <NFTPreview contract={item.token.collectionAddress} id={item.token.tokenId} />
+            <List.Item.Meta title={item.token} description={item.token.content} />
           </List.Item>
         )}
       />

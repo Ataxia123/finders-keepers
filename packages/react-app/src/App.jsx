@@ -194,18 +194,17 @@ function App(props) {
   console.log("🐸  🔥  asks", asks);
 
   const [askContent, setAskContent] = useState([]);
-
+  //@dev query zora to fetch token information if FF is not 0
   useEffect(
     askContent => {
       async function getAskContent() {
+        const newAskContent = [];
         for (let a in asks) {
-          if (asks[a].args.ask.findersFeeBps) {
-            console.log("found one with a finders fee!", asks[a].args.ask.findersFeeBps);
-            console.log("getting...", a, asks[a]);
-            console.log("ITEM", asks[a].args.tokenContract, asks[a].args.tokenId.toString());
-            const item = await setAskContent(asks[a].args.tokenContract, asks[a].args.tokenId.toString());
-            console.log("item", item);
-          }
+          //if (asks[a].args.ask.findersFeeBps > 0) {
+          console.log("found one with a finders fee!", asks[a].args.ask.findersFeeBps);
+          console.log("getting...", a, asks[a]);
+          console.log("ITEM", asks[a].args.tokenContract, asks[a].args.tokenId.toString());
+
           const thisToken = {
             address: asks[a].args.tokenContract,
             tokenId: asks[a].args.tokenId.toString(),
@@ -223,19 +222,21 @@ function App(props) {
 
           const fullObject = { ...response.token, ask: asks[a].args.ask };
 
-          askContent.push(fullObject);
-
-          //}else{
-          //  console.log("...")
+          newAskContent.push(fullObject);
+          console.log("📡 AskContent", askContent);
+          //} else {
+          // console.log("...");
+          //console.log("📡 AskContent", askContent);
           //}
-          console.log("💾 saving content:", fullObject);
         }
+        console.log("💾 saving content:", newAskContent);
+        setAskContent(newAskContent);
       }
       getAskContent();
     },
     [asks],
   );
-
+  console.log("📡 AskContent", askContent);
   /*
   const addressFromENS = useResolveName(mainnetProvider, "austingriffith.eth");
   console.log("🏷 Resolved austingriffith.eth as:",addressFromENS)
