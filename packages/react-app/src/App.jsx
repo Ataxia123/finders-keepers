@@ -230,7 +230,7 @@ function App(props) {
           //}
         }
         console.log("💾 saving content:", newAskContent);
-        setAskContent(newAskContent);
+        setAskContent([newAskContent]);
       }
       getAskContent();
     },
