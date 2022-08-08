@@ -42,22 +42,19 @@ function Home({ zdk, address, yourLocalBalance, readContracts, askContent, Balan
   };
   return (
     <div>
-      {" "}
       <List
         bordered
         dataSource={askContent}
-        renderItem={item => (
-          <List.Item>
-            <NFTPreview
-              contract={item.token ? item.token.collectionAddress : "0x00"}
-              id={item.token ? item.token.tokenId : "4591"}
-            />
-            <List.Item.Meta
-              title={item.token ? item.collectionAddress : "0x00"}
-              description={item.token ? item.token.content : "4591"}
-            />
-          </List.Item>
-        )}
+        renderItem={item =>
+          item.token ? (
+            <List.Item>
+              <NFTPreview contract={item.token.collectionAddress} id={item.token.tokenId} />
+              <List.Item.Meta title={item.collectionAddress} description={item.token.content} />
+            </List.Item>
+          ) : (
+            "No tokens yet"
+          )
+        }
       />
     </div>
   );
