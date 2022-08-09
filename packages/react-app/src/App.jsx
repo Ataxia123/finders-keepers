@@ -189,17 +189,18 @@ function App(props) {
   // keep track of a variable from the contract in the local React state:
   const purpose = useContractReader(readContracts, "YourContract", "purpose");
 
-  const asks = useEventListener(readContracts, "ASKS", "AskCreated", mainnetProvider, 14996934);
+  const asks = useEventListener(readContracts, "ASKS", "AskCreated", mainnetProvider, 14596934);
 
   console.log("🐸  🔥  asks", asks);
 
   const [askContent, setAskContent] = useState([]);
-  //@dev query zora to fetch token information if FF is not 0
+
   useEffect(
     askContent => {
       async function getAskContent() {
         const newAskContent = [];
         for (let a in asks) {
+          //@dev query zora to fetch token information if FF is not 0
           //if (asks[a].args.ask.findersFeeBps > 0) {
           console.log("found one with a finders fee!", asks[a].args.ask.findersFeeBps);
           console.log("getting...", a, asks[a]);
@@ -230,7 +231,7 @@ function App(props) {
           //}
         }
         console.log("💾 saving content:", newAskContent);
-        setAskContent([newAskContent]);
+        setAskContent({ newAskContent });
       }
       getAskContent();
     },
